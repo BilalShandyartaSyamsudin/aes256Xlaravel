@@ -3,8 +3,6 @@
     <div>
         <div class="flex w-screen h-max px-20 py-10 justify-center">
             <div>
-                {{-- <x-form.form-data /> --}}
-                {{-- <x-form.data-json/> --}}
                 <form action="{{ route('data.submit') }}" method="POST">
                     @csrf
                     <div class="flex gap-5">
@@ -62,39 +60,56 @@
                     <div class="mt-10">
                         <x-button type="submit" />
                     </div>
-                </form>
-                <div>
+
                     <div class="ml-44 mt-20">
                         <x-label text="Private Message" />
                         <textarea rows="13" cols="100" readonly>
-                            @isset($data)
-{{ json_encode($data, JSON_PRETTY_PRINT) }}
+@isset($data)
+{!! json_encode($data, JSON_PRETTY_PRINT) !!}
 @endisset
-                        </textarea>
+</textarea>
                     </div>
                     <div class="ml-44 mt-20">
                         <x-label text="Encrypted Private Message Using (AES256)" />
                         <textarea rows="13" cols="100" readonly>
-                            @isset($encryptedData)
-{{ $encryptedData }}
+@isset($message)
+{!! $message !!}
 @endisset
-                        </textarea>
+</textarea>
                     </div>
                     <div class="ml-44 mt-20">
                         <x-label text="JSON Public Message" />
                         <textarea rows="13" cols="100" readonly>
-                            @isset($data)
-{
-                                "apikey": "{{ $apikey }}",
-                                "uniqued": "{{ $uniqued }}",
-                                "timestamp": "{{ $timestamp }}",
-                                "encryptedData": "{{ $encryptedData }}"
-                            }
+@isset($jsonPublicMessage)
+{!! $jsonPublicMessage !!}
 @endisset
-                        </textarea>
+</textarea>
                     </div>
-                </div>
-
+                    <div class="ml-44 mt-20">
+                        <x-label text="Encrypted Private Message Using (AES256) Response" />
+                        <textarea rows="13" cols="100" readonly>
+@isset($encryptedResponseMessage)
+{!! $encryptedResponseMessage !!}
+@endisset
+</textarea>
+                    </div>
+                    <div class="ml-44 mt-20">
+                        <x-label text="JSON Public Response" />
+                        <textarea rows="13" cols="100">
+@isset($response)
+{!! json_encode($response, JSON_PRETTY_PRINT) !!}
+@endisset
+</textarea>
+                    </div>
+                    <div class="ml-44 mt-20">
+                        <x-label text="JSON Private Message Decrypt Response" />
+                        <textarea rows="13" cols="100">
+@isset($responseMessage)
+{!! $responseMessage !!}
+@endisset
+</textarea>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
