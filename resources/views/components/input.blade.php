@@ -5,5 +5,5 @@
         id="{{ $id ?? '' }}" 
         value="{{ $value ?? '' }}" 
         placeholder="{{ $placeholder ?? '' }}"
-        class="{{ $class ?? '' }} {{ in_array($type, ['text', 'email', 'number']) ? 'rounded-lg outline outline-1 outline-black' : '' }}">
+        class="{{ $class ?? '' }} {{ in_array($type, ['text', 'email', 'number', 'password']) ? 'rounded-lg border-[1px] border-slate-700' : '' }}">
 </div>

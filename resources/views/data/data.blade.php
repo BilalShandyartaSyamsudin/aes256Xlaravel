@@ -1,7 +1,7 @@
 @extends('data.layouts.app')
 @section('content')
     <div>
-        <div class="flex w-screen h-max px-20 py-10 justify-center">
+        <div class="flex w-screen h-max px-20 py-48 justify-center">
             <div>
                 <form action="{{ route('data.submit') }}" method="POST">
                     @csrf
