@@ -49,7 +49,7 @@ class HomeController extends Controller
             return $item;
         }, $responseData['data'] ?? []);
 
-        return view('home.home', [
+        return view('home', [
             'responseData' => $mappedData,
         ]);
     }

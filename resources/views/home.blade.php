@@ -1,6 +1,4 @@
-@extends('home.layouts.app')
-
-@section('content')
+<x-app-layout>
     <div class="flex min-h-full items-center justify-center py-40 px-20 z-0">
         <div class="owl-carousel owl-theme z-0">
             @foreach($responseData as $item)
@@ -26,4 +24,4 @@
         </div>
         
     </div>
-@endsection
+</x-app-layout>

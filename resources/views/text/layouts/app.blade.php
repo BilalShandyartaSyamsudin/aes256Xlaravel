@@ -9,7 +9,7 @@
 </head>
 
 <body class="w-full h-full">
-    <x-navbar />
+    @include('layouts.navigation')
     @yield('content')
 </body>
 
