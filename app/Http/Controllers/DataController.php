@@ -10,7 +10,7 @@ class DataController extends Controller
     public function show()
     {
         $data = [];
-        return view('data.data', ['data' => $data]);
+        return view('data', ['data' => $data]);
     }
 
     public function data(Request $request)
@@ -56,7 +56,7 @@ class DataController extends Controller
     // Mendekripsi pesan dari respons jika ada
     $responseMessage = isset($response['message']) ? $this->decrypt($response['message'], $password, $uniqued) : null;
 
-    return view('data.data', [
+    return view('data', [
         'data' => $data,
         'message' => $message,
         'apikey' => $request->input('apikey'),

@@ -9,23 +9,23 @@ class HomeController extends Controller
 {
     public function show()
     {
-        $url = "http://sereg.alcorsys.com:8989/JDataClassQuery";
-        $apikey = "06EAAA9D10BE3D4386D10144E267B681";
-        $uniqued = "JFKlnUZyyu0MzRqj";
-        $password = "A9CCF340D9A490104AC5159B8E1CBXXX";
+        $url = env('API_URL');
+        $apikey = env('API_KEY');
+        $uniqued = env('UNIQUED');
+        $password = env('PASSWORD');
         $timestamp = now()->format('Y/m/d H:i:s');
         $data = [
-            'datacore' => "core_002",
-            'dataclass' => "wareHouse",
-            'recordsperpage' => 0,
-            'currentpageno' => 0,
-            'condition' => "whtype='SL'",
-            'order' => "warehouse",
-            'recordcount' => "yes",
-            'fields' => "whcode, warehouse",
-            'userid' => "ganiadi@thepyxis.net",
-            'groupid' => "XCYTUA",
-            'businessid' => "PJLBBS"
+            'datacore' => env('DATACORE'),
+            'dataclass' => env('DATA_CLASS'),
+            'recordsperpage' => env('RECORDSPERPAGE'),
+            'currentpageno' => env('CURRENTPAGENO'),
+            'condition' => env('CONDITION'),
+            'order' => env('ORDER'),
+            'recordcount' => env('RECORDCOUNT'),
+            'fields' => env('FIELDS'),
+            'userid' => env('USER_ID'),
+            'groupid' => env('GROUP_ID'),
+            'businessid' => env('BUSINESS_ID')
         ];
 
         $message = strtoupper($this->encrypt(json_encode($data), $password, $uniqued));

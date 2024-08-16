@@ -1,7 +1,6 @@
-@extends('data.layouts.app')
-@section('content')
+<x-app-layout>
     <div>
-        <div class="flex w-screen h-max px-20 py-48 justify-center">
+        <div class="flex w-screen h-max p-20 justify-center">
             <div>
                 <form action="{{ route('data.submit') }}" method="POST">
                     @csrf
@@ -113,4 +112,4 @@
             </div>
         </div>
     </div>
-@endsection
+</x-app-layout>
