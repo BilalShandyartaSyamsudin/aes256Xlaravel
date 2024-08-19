@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Message;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
@@ -41,10 +42,35 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Data yang akan disimpan di tabel messages
+        $data = [
+            'datacore' => env('DATACORE'),
+            'dataclass' => env('DATA_CLASS'),
+            'recordsperpage' => env('RECORDSPERPAGE'),
+            'currentpageno' => env('CURRENTPAGENO'),
+            'condition' => env('CONDITION'),
+            'order' => env('ORDER'),
+            'recordcount' => env('RECORDCOUNT'),
+            'fields' => env('FIELDS'),
+            'userid' => $user->email,
+            'groupid' => env('GROUP_ID'),
+            'businessid' => env('BUSINESS_ID')
+        ];
+
+        Message::create([
+            'user_id' => $user->id,
+            'url' => env('API_URL'),
+            'apikey' => env('API_KEY'),
+            'uniqued' => env('UNIQUED'),
+            'password' => env('PASSWORD'),
+            'timestamp' => now()->format('Y/m/d H:i:s'),
+            'data' => $data,
+        ]);
+
         event(new Registered($user));
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('home.show', absolute: false));
     }
 }

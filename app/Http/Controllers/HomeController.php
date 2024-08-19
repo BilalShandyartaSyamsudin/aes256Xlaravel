@@ -2,32 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Message;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
 class HomeController extends Controller
 {
     public function show()
     {
-        $url = env('API_URL');
-        $apikey = env('API_KEY');
-        $uniqued = env('UNIQUED');
-        $password = env('PASSWORD');
-        $timestamp = now()->format('Y/m/d H:i:s');
-        $data = [
-            'datacore' => env('DATACORE'),
-            'dataclass' => env('DATA_CLASS'),
-            'recordsperpage' => env('RECORDSPERPAGE'),
-            'currentpageno' => env('CURRENTPAGENO'),
-            'condition' => env('CONDITION'),
-            'order' => env('ORDER'),
-            'recordcount' => env('RECORDCOUNT'),
-            'fields' => env('FIELDS'),
-            'userid' => env('USER_ID'),
-            'groupid' => env('GROUP_ID'),
-            'businessid' => env('BUSINESS_ID')
-        ];
+        // Ambil data message dari database berdasarkan user yang sedang login
+        $messageData = Message::where('user_id', Auth::id())->first();
 
+        if (!$messageData) {
+            return view('home', ['responseData' => []]);
+        }
+
+        // Gunakan data dari database
+        $url = $messageData->url;
+        $apikey = $messageData->apikey;
+        $uniqued = $messageData->uniqued;
+        $password = $messageData->password;
+        $timestamp = now()->format('Y/m/d H:i:s');
+        $data = $messageData->data;
+
+        // Enkripsi data
         $message = strtoupper($this->encrypt(json_encode($data), $password, $uniqued));
 
         $jsonPublicMessage = json_encode([
@@ -37,12 +35,15 @@ class HomeController extends Controller
             'message' => $message
         ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
 
+        // Kirim request ke API
         $response = $this->sendRequest($url, $jsonPublicMessage);
 
+        // Dekripsi response
         $responseMessage = isset($response['message']) ? $this->decrypt($response['message'], $password, $uniqued) : null;
 
         $responseData = json_decode($responseMessage, true);
 
+        // Proses response data untuk ditampilkan di view
         $mappedData = array_map(function($item) {
             $whcodeTrimmed = trim($item['whcode']);
             $item['image'] = $whcodeTrimmed . '.jpg'; 
@@ -54,6 +55,7 @@ class HomeController extends Controller
         ]);
     }
 
+    // Fungsi untuk enkripsi
     private function encrypt($plaintext, $password, $iv)
     {
         $key = $password;
@@ -63,6 +65,7 @@ class HomeController extends Controller
         return strtoupper(bin2hex($ciphertext));
     }
 
+    // Fungsi untuk mengirim request ke API
     private function sendRequest($url, $jsonPublicMessage)
     {
         try {
@@ -77,6 +80,7 @@ class HomeController extends Controller
         }
     }
 
+    // Fungsi untuk dekripsi
     private function decrypt($ciphertext, $password, $iv)
     {
         $key = $password;
