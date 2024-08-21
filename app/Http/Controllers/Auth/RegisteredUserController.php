@@ -30,19 +30,52 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $this->validateRegistration($request);
+
+        $user = $this->createUser($request);
+
+        $encryptedData = $this->encryptUserData($user);
+
+        $this->saveMessage($user, $encryptedData);
+
+        event(new Registered($user));
+
+        Auth::login($user);
+
+        return redirect(route('home.show', absolute: false));
+    }
+
+    /**
+     * Validate the registration request.
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    private function validateRegistration(Request $request)
+    {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
+    }
 
-        $user = User::create([
+    /**
+     * Create a new user with the validated data.
+     */
+    private function createUser(Request $request): User
+    {
+        return User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
         ]);
+    }
 
-        // Data yang akan disimpan di tabel messages
+    /**
+     * Encrypt user data before saving it to the database.
+     */
+    private function encryptUserData(User $user): string
+    {
         $data = [
             'datacore' => env('DATACORE'),
             'dataclass' => env('DATA_CLASS'),
@@ -57,20 +90,24 @@ class RegisteredUserController extends Controller
             'businessid' => env('BUSINESS_ID')
         ];
 
+        return strtoupper(bin2hex(openssl_encrypt(
+            json_encode($data),
+            'aes-256-cbc',
+            env('PASSWORD'),
+            OPENSSL_RAW_DATA,
+            env('UNIQUED')
+        )));
+    }
+
+    /**
+     * Save the encrypted message data in the messages table.
+     */
+    private function saveMessage(User $user, string $encryptedData)
+    {
         Message::create([
             'user_id' => $user->id,
-            'url' => env('API_URL'),
-            'apikey' => env('API_KEY'),
-            'uniqued' => env('UNIQUED'),
-            'password' => env('PASSWORD'),
+            'data' => $encryptedData,
             'timestamp' => now()->format('Y/m/d H:i:s'),
-            'data' => $data,
         ]);
-
-        event(new Registered($user));
-
-        Auth::login($user);
-
-        return redirect(route('home.show', absolute: false));
     }
 }

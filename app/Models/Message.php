@@ -10,7 +10,7 @@ class Message extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id', 'url', 'apikey', 'uniqued', 'password', 'timestamp', 'data',
+        'user_id', 'timestamp', 'data',
     ];
 
     protected $casts = [

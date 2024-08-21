@@ -49,7 +49,7 @@
                     </a>
                 @endif
 
-                <x-primary-button class="ms-3 ml-[10rem]">
+                <x-primary-button class="ms-3 ml-[11rem]">
                     {{ __('Log in') }}
                 </x-primary-button>
             </div>
