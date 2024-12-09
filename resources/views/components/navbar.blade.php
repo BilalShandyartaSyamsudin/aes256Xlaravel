@@ -34,14 +34,14 @@
                                 clip-rule="evenodd" />
                         </svg>
                     </button>
-                    <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    {{-- <div class="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                         <a href="{{ route('profile.show') }}"
                             class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profile</a>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Logout</button>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         @endauth
