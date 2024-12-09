@@ -13,11 +13,13 @@
             </div>
 
             {{-- Form Login --}}
-            <div class="mt-28 hidden" id="form-login">
-                <form action="" class="flex flex-col items-center w-full gap-10">
+            <div class="mt-28 hidden" id="form-login" >
+                <form action="" class="flex flex-col items-center w-full gap-10" method="POST" action="{{ route('login') }}">
+                    @csrf
                     <div>
                         <x-label text="Email" />
                         <x-input type="email" name="email" id="email" required class="w-[31.5rem]" />
+                        <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     </div>
                     <div>
                         <x-label text="Password" />
@@ -37,7 +39,14 @@
                             </div>
 
                         </div>
+                        <x-input-error :messages="$errors->get('password')" class="mt-2" />
                     </div>
+                    @if (Route::has('password.request'))
+                        <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
+                            href="{{ route('password.request') }}">
+                            {{ __('Forgot your password?') }}
+                        </a>
+                    @endif
                     <x-button type="submit" text="Login" />
                 </form>
             </div>
@@ -100,13 +109,13 @@
                 <div id="btn-register" class="hidden">
                     <div class="flex gap-2">
                         <p>Belum punya akun?</p>
-                        <button id="show-register" class="text-blue-500">Login</button>
+                        <button id="show-register" class="text-blue-500">Register</button>
                     </div>
                 </div>
                 <div id="btn-login" class="hidden">
                     <div class="flex gap-2">
                         <p>Sudah punya akun?</p>
-                        <button id="show-login" class="text-green-500">Register</button>
+                        <button id="show-login" class="text-green-500">Login</button>
                     </div>
                 </div>
             </div>
